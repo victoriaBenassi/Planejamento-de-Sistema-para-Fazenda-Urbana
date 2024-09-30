@@ -1,0 +1,118 @@
+---------------------------------Criando o Banco de Dados FAZENDA_AGROCONNECT--------------------------------------------------------
+ USE master ;
+ GO
+ CREATE DATABASE FAZENDA_AGROCONNECT
+ ON 
+ (NAME = FAZENDA_AGROCONNECT,
+ FILENAME = 'C:\bada\PIM\fisico-script\FAZENDA_AGROCONNECT.MDF')
+ LOG ON (
+ NAME = FAZENDA_AGROCONNECT_log,
+ FILENAME = 'C:\bada\PIM\fisico-script\FAZENDA_AGROCONNECT.ldf');
+ GO
+ USE FAZENDA_AGROCONNECT
+ 
+ -- Tabela: tb_admin
+ 
+	CREATE TABLE tb_admin (
+    id_fazenda_admin INTEGER IDENTITY NOT NULL,
+    nome_completo_admin VARCHAR(30) NOT NULL,
+    nome_empresa_admin VARCHAR(30) NOT NULL,
+    email_admin VARCHAR(30) NOT NULL,
+    senha_admin VARCHAR(10) NOT NULL,
+    produtos_selecionados_admin VARCHAR(80) NOT NULL,
+    PRIMARY KEY(id_fazenda_admin)
+	);
+ -- Tabela: tb_funcionario
+	CREATE TABLE tb_funcionario (
+	id_funcionario INTEGER IDENTITY NOT NULL,
+    cpf_funcionario VARCHAR(12) NOT NULL,
+    nome_completo_funcionario VARCHAR(30) NOT NULL,
+    data_nascimento_funcionario DATE NOT NULL,
+    rg_funcionario VARCHAR(9) NOT NULL,
+    cargo_funcionario VARCHAR(20) NOT NULL,
+    salario_funcionario MONEY NOT NULL,
+    data_admissao_funcionario DATE NOT NULL,
+    status_funcionario BIT NOT NULL,
+	PRIMARY KEY (id_funcionario),
+	CONSTRAINT check_salario_funcionario CHECK (salario_funcionario > 0)
+	);
+-- Tabela: tb_estoque
+	CREATE TABLE tb_estoque (
+	id_estoque INTEGER IDENTITY NOT NULL,
+	item_estoque VARCHAR(20) NOT NULL,
+	categoria_estoque VARCHAR(15),
+    unidade_estoque VARCHAR(2),
+    quantidade_estoque INTEGER NOT NULL,
+    em_estoque BIT NOT NULL,
+	PRIMARY KEY (id_estoque),
+	CONSTRAINT check_categoria_estoque CHECK (categoria_estoque IN ('Semente', 'Fertilizante')),
+	CONSTRAINT check_unidade_estoque CHECK (unidade_estoque IN ('UN', 'CX')),
+	CONSTRAINT check_quantidade_estoque CHECK (quantidade_estoque >= 0)
+	);
+	-- Tabela: tb_cliente
+	CREATE TABLE tb_cliente (
+    id_cliente INTEGER IDENTITY NOT NULL,
+    nome_completo_cliente VARCHAR(30) NOT NULL,
+    email_cliente VARCHAR(30) NOT NULL,
+    telefone_cliente VARCHAR(15) NOT NULL,
+    cep_cliente VARCHAR(15) NOT NULL,
+    numero_cliente VARCHAR(4) NOT NULL,
+    bairro_cliente VARCHAR(20) NOT NULL,
+	PRIMARY KEY (id_cliente)
+	);
+	-- Tabela: tb_pedido
+	CREATE TABLE tb_pedido (
+    id_pedido INTEGER IDENTITY NOT NULL,
+    id_cliente INTEGER NOT NULL,
+    id_fazenda_admin INTEGER NOT NULL,
+    data_pedido DATE NOT NULL,
+    tipo_pedido VARCHAR(10),
+    status_pedido BIT NOT NULL,
+	PRIMARY KEY (id_pedido),
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id_cliente),
+    FOREIGN KEY (id_fazenda_admin) REFERENCES tb_admin(id_fazenda_admin),
+	CONSTRAINT check_tipo_pedido CHECK (tipo_pedido IN ('Avulso', 'Contrato'))
+	);
+-- Tabela: tb_item_pedido
+	CREATE TABLE tb_item_pedido (
+    id_item_pedido INTEGER IDENTITY NOT NULL,
+    id_pedido INTEGER NOT NULL,
+    nome_item VARCHAR(20) NOT NULL,
+    data_item DATE NOT NULL,
+	quantidade_item INTEGER NOT NULL,
+    valor_item MONEY NOT NULL,
+    id_estoque INTEGER NOT NULL,
+	PRIMARY KEY (id_item_pedido),
+    FOREIGN KEY (id_pedido) REFERENCES tb_pedido(id_pedido),
+    FOREIGN KEY (id_estoque) REFERENCES tb_estoque(id_estoque),
+	CONSTRAINT check_quantidade_item CHECK (quantidade_item > 0),
+	CONSTRAINT check_valor_item CHECK (valor_item > 0)
+	);
+	-- Tabela: tb_compra
+	CREATE TABLE tb_compra (
+    id_compra INTEGER IDENTITY NOT NULL,
+    id_pedido INTEGER NOT NULL,
+    id_cliente INTEGER NOT NULL,
+    data_compra DATE NOT NULL,
+    valor_compra MONEY NOT NULL,
+    forma_pagamento VARCHAR(10),
+	PRIMARY KEY (id_compra),
+    FOREIGN KEY (id_pedido) REFERENCES tb_pedido(id_pedido),
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id_cliente),
+	CONSTRAINT check_valor_compra CHECK (valor_compra >= 0),
+	CONSTRAINT check_forma_pagamento CHECK (forma_pagamento IN ('Débito', 'Crédito', 'PIX', 'Boleto'))
+	);
+	-- Tabela: tb_entrega
+	CREATE TABLE tb_entrega (
+    id_entrega INTEGER IDENTITY NOT NULL,
+    id_cliente INTEGER NOT NULL,
+    id_compra INTEGER NOT NULL,
+    prazo_entrega INTEGER NOT NULL,
+    status_entrega BIT NOT NULL,
+	PRIMARY KEY (id_entrega),
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id_cliente),
+    FOREIGN KEY (id_compra) REFERENCES tb_compra(id_compra),
+	CONSTRAINT check_prazo_entrega CHECK (prazo_entrega > 0 AND prazo_entrega < 20)
+	);
+	
+

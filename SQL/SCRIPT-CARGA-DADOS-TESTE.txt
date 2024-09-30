@@ -1,0 +1,37 @@
+USE FAZENDA_AGROCONNECT
+
+INSERT INTO tb_admin (nome_completo_admin, nome_empresa_admin, email_admin, senha_admin, produtos_selecionados_admin)
+VALUES ('Lucas Santos', 'Vista Verde', 'santoslucas@gmail.com', '@0509V', 'Alface romana, Pimenta do reino, Salsa, Cebolinha, Coentro');
+
+INSERT INTO tb_funcionario (cpf_funcionario, nome_completo_funcionario, data_nascimento_funcionario, rg_funcionario, cargo_funcionario, salario_funcionario, data_admissao_funcionario, status_funcionario)
+VALUES ('12345678901', 'Luana Pereira', '1990-01-01', '1234567', 'entregador', 3000.00, '2020-01-01', 1),
+       ('98765432101', 'Pedro Silva', '1995-05-05', '7654321', 'Vendedor', 3000.00, '2021-01-01', 1);
+
+INSERT INTO tb_estoque (item_estoque, categoria_estoque, unidade_estoque, quantidade_estoque, em_estoque)
+VALUES ('Alface romana', 'Semente', 'UN', 100, 1),
+       ('Pimenta do reino', 'Semente', 'CX', 15, 1),
+	   ('Salsa', 'Semente', 'UN', 100, 1),
+	   ('Coentro', 'Semente', 'UN', 90, 1),
+       ('Cebolinha', 'Semente', 'CX', 10, 1);
+
+INSERT INTO tb_cliente (nome_completo_cliente, email_cliente, telefone_cliente, cep_cliente, numero_cliente, bairro_cliente)
+VALUES ('Paulo Matos', 'paulomatos1@gmail.com', '123456789', '12345-678', '123', 'Jardim das Flores'),
+       ('Maria Clara Silva', 'mariaclara2@gmail.com', '987654321', '98765-432', '456', 'Campo Belo');
+
+INSERT INTO tb_pedido (id_cliente, id_fazenda_admin, data_pedido, tipo_pedido, status_pedido)
+VALUES (1, 1, '2024-05-22', 'Avulso', 1),
+       (2, 1, '2024-05-23', 'Contrato', 1);
+
+INSERT INTO tb_item_pedido (id_pedido, nome_item, data_item, quantidade_item ,valor_item, id_estoque)
+VALUES (1, 'Salsa', '2024-05-22', 50, 140.00, 3),
+	   (1, 'Alface romana', '2024-05-22', 10, 56.00, 1),
+	   (2, 'Alface romana', '2024-05-23', 20, 112.00, 1);
+
+INSERT INTO tb_compra (id_pedido, id_cliente, data_compra, valor_compra, forma_pagamento)
+VALUES (1, 1, '2024-05-22', 196.00, 'Débito'),
+       (2, 2, '2024-05-23', 112.00, 'Crédito');
+
+INSERT INTO tb_entrega (id_cliente, id_compra, prazo_entrega, status_entrega)
+VALUES (1, 1, 5, 1),
+       (2, 2, 7, 1);
+

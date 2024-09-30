@@ -6,6 +6,11 @@ Planejamento e desenvolvimento de Software de processos agrícolas, aprimorando 
  
 - Este projeto acadêmico se concentra no desenvolvimento de um sistema de controle para fazendas urbanas, abordando a necessidade crescente de soluções tecnológicas para a agricultura sustentável. O sistema foi projetado para otimizar processos agrícolas, melhorar a gestão de recursos e aumentar a produtividade, contribuindo para a segurança alimentar. 
 
+### Descrição Adicional
+
+Este projeto foi parte de um trabalho em grupo, onde atuei na modelagem e implementação do banco de dados.
+A experiência aprimorou minhas habilidades em design de banco de dados, além de me proporcionar uma compreensão mais profunda sobre as necessidades do setor agrícola urbano.
+
 ## Banco de Dados 
 
 Os processos para a modelagem e o desenvolvimento do banco de dados foram:
